@@ -1,13 +1,15 @@
 package com.farhad.tms.dto.request;
 
+import java.util.Set;
+
 public record UserRequestDTO(
-        Long id,
         String firstName,
         String lastName,
         String username,
         String email,
         String password,
 
-        Long task_id
+        
+        Set<Long> taskIds
 ) {
 }

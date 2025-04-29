@@ -2,6 +2,7 @@ package com.farhad.tms.controller;
 
 import com.farhad.tms.dto.request.UserRequestDTO;
 import com.farhad.tms.dto.response.CustomUserResponse;
+import com.farhad.tms.dto.response.UserResponseDTO;
 import com.farhad.tms.model.User;
 import com.farhad.tms.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,16 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @GetMapping("/customUserResponse")
+    public ResponseEntity<List<CustomUserResponse>> findAllCustomUsers() {
+        return new ResponseEntity<>(userService.findAllUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/userResponse")
+    public ResponseEntity<List<UserResponseDTO>> findAllUserResponse() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User findUser = userService.findUserById(id);
@@ -43,11 +54,6 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequestDTO userRequestDTO) {
         User updatedUser = userService.updateUser(id, userRequestDTO);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-    }
-
-    @GetMapping("/custom-findAllUsers")
-    public ResponseEntity<Set<CustomUserResponse>> findAllCustomUsers() {
-        return ResponseEntity.ok(userService.findAllCustomUsers());
     }
 }
 

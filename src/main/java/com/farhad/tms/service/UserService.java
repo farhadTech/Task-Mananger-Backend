@@ -2,7 +2,10 @@ package com.farhad.tms.service;
 
 import com.farhad.tms.dto.request.UserRequestDTO;
 import com.farhad.tms.dto.response.CustomUserResponse;
+import com.farhad.tms.dto.response.UserResponseDTO;
+import com.farhad.tms.model.Task;
 import com.farhad.tms.model.User;
+import com.farhad.tms.repository.TaskRepository;
 import com.farhad.tms.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,19 +15,33 @@ import java.util.Set;
 @Service
 public class UserService {
     UserRepository userRepository;
+    TaskRepository taskRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, TaskRepository taskRepository) {
         this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
     }
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
+    public List<CustomUserResponse> findAllUsers() {
+        return userRepository.findAllUsers();
+    }
+
+    public List<UserResponseDTO> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
+
     public User findUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return user;
+    }
+
+    public List<UserResponseDTO> getUserById() {
+        return userRepository.getAllUsers();
     }
 
     public User createUser(UserRequestDTO userRequestDTO) {
@@ -38,6 +55,13 @@ public class UserService {
         user.setUsername(userRequestDTO.username());
         user.setEmail(userRequestDTO.email());
         user.setPassword(userRequestDTO.password());
+
+        Set<Task> tasks = taskRepository.getTaskByIdIsIn(userRequestDTO.taskIds());
+        for (Task task : tasks) {
+            task.setUser(user);
+        }
+        user.setTask(tasks);
+
         return userRepository.save(user);
     }
 
@@ -49,6 +73,13 @@ public class UserService {
         user.setUsername(userRequestDTO.username());
         user.setEmail(userRequestDTO.email());
         user.setPassword(userRequestDTO.password());
+
+        Set<Task> tasks = taskRepository.getTaskByIdIsIn(userRequestDTO.taskIds());
+        for (Task task : tasks) {
+            task.setUser(user);
+        }
+        user.setTask(tasks);
+
         return userRepository.save(user);
     }
 
@@ -57,11 +88,6 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         userRepository.deleteById(id);
         return "User deleted";
-    }
-
-    public Set<CustomUserResponse> findAllCustomUsers() {
-        Set<CustomUserResponse> users = userRepository.findAllUsers();
-        return users;
     }
 }
 

@@ -6,12 +6,11 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public record TaskRequestDTO(
-        Long id,
         String title,
         status taskStatus,
         LocalDateTime startTime,
         LocalDateTime endTime,
 
-        Long user_id
+        Long userId
 ) implements Serializable {
 }

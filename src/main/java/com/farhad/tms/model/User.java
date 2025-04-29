@@ -1,5 +1,6 @@
 package com.farhad.tms.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class User {
     private String email;
     private String password;
 
-
-    @OneToMany(mappedBy = "user")
-    List<Task> task;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<Task> task = new LinkedHashSet<>();
 }
