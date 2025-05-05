@@ -51,6 +51,10 @@ public class TaskService {
         task.setTaskStatus(taskRequestDTO.taskStatus());
         task.setStartTime(taskRequestDTO.startTime());
         task.setEndTime(taskRequestDTO.endTime());
+
+        User user = userRepository.getUserById(taskRequestDTO.userId());
+        task.setUser(user);
+
         return taskRepository.save(task);
     }
 

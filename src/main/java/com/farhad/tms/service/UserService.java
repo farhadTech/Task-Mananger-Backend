@@ -57,9 +57,6 @@ public class UserService {
         user.setPassword(userRequestDTO.password());
 
         Set<Task> tasks = taskRepository.getTaskByIdIsIn(userRequestDTO.taskIds());
-        for (Task task : tasks) {
-            task.setUser(user);
-        }
         user.setTask(tasks);
 
         return userRepository.save(user);
@@ -75,9 +72,6 @@ public class UserService {
         user.setPassword(userRequestDTO.password());
 
         Set<Task> tasks = taskRepository.getTaskByIdIsIn(userRequestDTO.taskIds());
-        for (Task task : tasks) {
-            task.setUser(user);
-        }
         user.setTask(tasks);
 
         return userRepository.save(user);
